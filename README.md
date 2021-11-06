@@ -1,58 +1,61 @@
+# Receipt parser (Work in Progress)
+This solution extracts text from the scanned groceries receipts, parses the text, and saves the results in tabular form to the S3 for further processing and analysis.
 
-# Welcome to your CDK Python project!
+# General flow for data ingestion
 
-This is a blank project for Python development with CDK.
+1. Upload an original image to the S3 landing bucket to the `landing` folder and trigger a lambda function.
+2. A lambda function extracts the text from the image and saves results back to the S3 to the `staging` folder as a CSV file.
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+# Configure credentials
+Setup aws credentials via `aws configure` or define it via environment variables.
+You can generate aws credentials in AWS Console.
 
-This project is set up like a standard Python project.  The initialization
-process also creates a virtualenv within this project, stored under the `.venv`
-directory.  To create the virtualenv it assumes that there is a `python3`
-(or `python` for Windows) executable in your path with access to the `venv`
-package. If for any reason the automatic creation of the virtualenv fails,
-you can create the virtualenv manually.
-
-To manually create a virtualenv on MacOS and Linux:
+# Configure virtual environment and install cdk modules
 
 ```
-$ python3 -m venv .venv
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
 ```
 
-After the init process completes and the virtualenv is created, you can use the following
-step to activate your virtualenv.
+# Installing dependencies for a Lambda Layer 
+This lambda function uses `amazon-textract-prettyprinter` and `amazon-textract-response-parser` libraries, so we would need to create a new lamba layer that will contain this library.
 
+The command below will install necessary dependencies locally, then cdk app will create a new layer using this packages:
 ```
-$ source .venv/bin/activate
+$ cd lambda-layer
+$ bash create_new_layer.sh
 ```
-
-If you are a Windows platform, you would activate the virtualenv like this:
-
+Script output:
 ```
-% .venv\Scripts\activate.bat
-```
-
-Once the virtualenv is activated, you can install the required dependencies.
-
-```
-$ pip install -r requirements.txt
-```
-
-At this point you can now synthesize the CloudFormation template for this code.
-
-```
-$ cdk synth
+Test if necessary packages is installed...
+Python 3.9.5
+pip 21.1.1 from .venv/lib/python3.9/site-packages/pip (python 3.9)
+Installing dependencies
+<RESPONSE TRUNCATED FOR READABILITY>
+Successfully installed amazon-textract-prettyprinter-0.0.10 amazon-textract-response-parser-0.1.20 boto3-1.19.12 botocore-1.22.12 jmespath-0.10.0 marshmallow-3.11.1 python-dateutil-2.8.2 s3transfer-0.5.0 six-1.16.0 tabulate-0.8.9 urllib3-1.26.7
+Done!
 ```
 
-To add additional dependencies, for example other CDK libraries, just add
-them to your `setup.py` file and rerun the `pip install -r requirements.txt`
-command.
 
-## Useful commands
 
- * `cdk ls`          list all stacks in the app
- * `cdk synth`       emits the synthesized CloudFormation template
- * `cdk deploy`      deploy this stack to your default AWS account/region
- * `cdk diff`        compare deployed stack with current state
- * `cdk docs`        open CDK documentation
+# Deploy function and necessary resources
+From the `receipt-parser` root directory:
+```
+cdk synth
+cdk deploy
+```
 
-Enjoy!
+# Test 
+Upload sample recept from static_assets folder to the bucket under `landing` folder.
+Wait for a few seconds and check if a new file appeared in the `staging` folder on the same bucket.
+
+
+## Useful Links
+- https://aws.amazon.com/prescriptive-guidance
+- https://github.com/aws-samples/amazon-textract-serverless-large-scale-document-processing
+- https://github.com/aws-samples/amazon-textract-code-samples
+- https://github.com/aws-samples/amazon-textract-response-parser/tree/master/src-python
+- https://aws.amazon.com/blogs/machine-learning/announcing-expanded-support-for-extracting-data-from-invoices-and-receipts-using-amazon-textract/
+- https://github.com/aws-samples/amazon-textract-analyze-expense-processing-pipeline
+- https://github.com/aws-samples/amazon-textract-textractor/tree/master/prettyprinter
