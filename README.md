@@ -47,8 +47,7 @@ cdk deploy
 ```
 
 # Test 
-Upload sample recept from static_assets folder to the bucket under `landing` folder.
-Wait for a few seconds and check if a new file appeared in the `staging` folder on the same bucket.
+Upload a sample receipt from the `static_assets` folder to the bucket under the `landing` folder. Wait for a few seconds and check if a new file appeared in the `staging` folder on the same bucket.
 
 
 ## Useful Links
