@@ -62,4 +62,18 @@ class ReceiptParserStack(cdk.Stack):
         # provide lambda function with read access to s3 bucket
         s3.grant_read_write(function)
 
+        # Outputs
+
+        # Bucket Name
+        cdk.CfnOutput(self, "BucketName",
+            value=s3.bucket_name,
+            description="The name of an S3 bucket"
+        )
+
+        # Function name
+        cdk.CfnOutput(self, "FunctionName",
+            value=function.function_name,
+            description="The name of a Lambda Function"
+        )
+
 

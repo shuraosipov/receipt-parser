@@ -44,6 +44,21 @@ From the `receipt-parser` root directory:
 ```
 cdk synth
 cdk deploy
+
+```
+
+After successful deploy you should see output like this:
+```
+...
+
+ReceiptParserStack
+
+Outputs:
+ReceiptParserStack.BucketName = receiptparserstack-s3bucketfbfa637e-1j835dh2u9yc1
+ReceiptParserStack.FunctionName = ReceiptParserStack-MyLambdaCCE802FB-sUYyGjrSYO2i
+
+Stack ARN:
+arn:aws:cloudformation:us-east-1:419091122511:stack/ReceiptParserStack/a05f30a0-3ead-11ec-8e1b-0a805f5ab73f
 ```
 
 # Test 
