@@ -166,3 +166,4 @@ $ cdk deploy --hotswap
 - https://aws.amazon.com/blogs/machine-learning/announcing-expanded-support-for-extracting-data-from-invoices-and-receipts-using-amazon-textract/
 - https://github.com/aws-samples/amazon-textract-analyze-expense-processing-pipeline
 - https://github.com/aws-samples/amazon-textract-textractor/tree/master/prettyprinter
+- https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-cli-command-reference-sam-local-generate-event.html
