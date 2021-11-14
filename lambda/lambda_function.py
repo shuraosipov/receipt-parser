@@ -6,6 +6,7 @@ import urllib.parse
 from textractprettyprinter.t_pretty_print_expense import get_string
 from textractprettyprinter.t_pretty_print_expense import Textract_Expense_Pretty_Print, Pretty_Print_Table_Format
 import pandas as pd
+import csv
 
 
 textract = boto3.client(service_name='textract')
@@ -65,18 +66,15 @@ def prerry_print_response_to_csv(prerry_print_response) -> str:
     products = { 'TITLE':[], 'PRICE':[] }
     meta = {}
 
+    #print(prerry_print_response)
+
     # Read prerry_print_response line by line and extract necessary fields
     for row in prerry_print_response.splitlines():
-
         if "RespDate" in row:
             meta['DATE'] = row.split(",")[1]
-        else:
-            meta['DATE'] = "N/A"
                     
         if "VENDOR_NAME" in row:
             meta['VENDOR'] = row.split(",")[1]
-        else:
-            meta['VENDOR'] = "N/A"
         
         if "TOTAL AMOUNT" in row:
             meta['TOTAL'] = row.split(",")[1]
@@ -90,10 +88,21 @@ def prerry_print_response_to_csv(prerry_print_response) -> str:
     
     df = pd.DataFrame(products)
     
-    df['VENDOR'] = meta['VENDOR']
-    df['DATE'] = meta['DATE']        
-
-    return df.to_csv(index=False)
+    try:
+        df['VENDOR'] = meta['VENDOR']
+    except KeyError as err:
+        df['VENDOR'] = 'N/A'
+        print(err)
+    
+    try:
+        df['DATE'] = meta['DATE']
+    except KeyError as err:
+        df['DATE'] = 'N/A'
+        print(err)
+        
+    result = df.to_csv(index=False, quoting=csv.QUOTE_ALL)
+    #print(result)
+    return result
 
 def lambda_handler(event, context):
 
