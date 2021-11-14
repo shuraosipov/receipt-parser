@@ -18,33 +18,69 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-# Installing dependencies for a Lambda Layer 
-This lambda function uses `amazon-textract-prettyprinter` and `amazon-textract-response-parser` libraries, so we would need to create a new lamba layer that will contain this library.
+# Create new Lambda Layer
 
-The command below will install necessary dependencies locally, then cdk app will create a new layer using this packages:
+## Create S3 bucket for storing lambda layers
+By default Lambda deployment package size is limited to 50MB.
+To overcome this limitation we will store lambda layer packages on S3 bucket.
+
+Use an existing bucket or create a new one using the command below:
 ```
-$ cd lambda-layer
-$ bash create_new_layer.sh
-```
-Script output:
-```
-Test if necessary packages is installed...
-Python 3.9.5
-pip 21.1.1 from .venv/lib/python3.9/site-packages/pip (python 3.9)
-Installing dependencies
-<RESPONSE TRUNCATED FOR READABILITY>
-Successfully installed amazon-textract-prettyprinter-0.0.10 amazon-textract-response-parser-0.1.20 boto3-1.19.12 botocore-1.22.12 jmespath-0.10.0 marshmallow-3.11.1 python-dateutil-2.8.2 s3transfer-0.5.0 six-1.16.0 tabulate-0.8.9 urllib3-1.26.7
-Done!
+aws s3 mb s3://shuraosipov-lambda-layers
 ```
 
+## Update requirements.txt
+Specify a list of packages you want to include to a layer in `requirements.txt` file.
+ 
+Default content is:
+```
+amazon-textract-prettyprinter==0.0.10
+amazon-textract-response-parser==0.1.20
+pandas
+```
 
+## Configure layer parameters
+Provide python version, layer name, layer description and target S3 backet for storing layers in the `confg` file.
+
+Default content is:
+```
+PYTHON_VERSION="python3.9"
+LAYER_NAME="pandas-textract-reader"
+LAYER_DESCRIPTION="Layer containing pandas, amazon-textract-response-parser and amazon-textract-prettyprinter libraries"
+BUCKET_NAME="shuraosipov-lambda-layers"
+```
+
+## Create a layer
+From the app root folder:
+```
+$ cd build_scripts/
+$ bash create_new_layer.sh config
+```
+
+You will see the following output:
+```
+Checking if necessary system packages is installed... Success!
+Python version - python3.9
+Package name - pandas-textract-reader-lambda-layer.zip
+Building lambda layer in /tmp/tmp.nqoEObnXYl/python/lib/python3.9/site-packages/ folder
+S3 bucket for storing lambda layer package - shuraosipov-lambda-layers
+Installing dependencies...  Success!
+Compiling the .zip file... Success!
+Archive size is 45M
+Uploading lambda layer package to S3... Success!
+Publishing a layer...  Success!
+Cleaning up... Success!
+Enjoy your newly created layer - arn:aws:lambda:us-east-1:419091122511:layer:pandas-textract-reader:3
+```
+
+# Configure your CDK app parameters
+Copy lambda layer arn and update `layer_version_arn' parameter in `cdk.json` file.
 
 # Deploy function and necessary resources
 From the `receipt-parser` root directory:
 ```
 cdk synth
 cdk deploy
-
 ```
 
 After successful deploy you should see an output like this:
