@@ -1,6 +1,7 @@
 {
   "app": "python3 app.py",
   "context": {
+    "layer_version_arn": "arn:aws:lambda:us-east-1:419091122511:layer:pandas-textract-reader:3",
     "@aws-cdk/aws-apigateway:usagePlanKeyOrderInsensitiveId": true,
     "@aws-cdk/core:enableStackNameDuplicates": true,
     "aws-cdk:enableDiffNoFail": true,

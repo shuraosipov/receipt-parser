@@ -1,5 +1,3 @@
-import os
-
 from aws_cdk import (
     aws_lambda as lambda_,
     aws_s3 as _s3,
@@ -32,15 +30,8 @@ class ReceiptParserStack(cdk.Stack):
 
 
         # import an existing Lambda Layer based on ARN
-        # layer = lambda_.LayerVersion.from_layer_version_arn(self, "TextractParserLayer",
-        #     layer_version_arn = "arn:aws:lambda:us-east-1:419091122511:layer:Amazon-Textract-Parsing-Library-Layer:1"
-        # )
-
-        # create lambda layer
-        layer = lambda_.LayerVersion(self, "TextractParserLayer",
-            code=lambda_.Code.from_asset("lambda-layer"),
-            compatible_runtimes=[lambda_.Runtime.PYTHON_3_9],
-            description="Lambda layer containting amazon-textract-response-parser and amazon-textract-prettyprinter python libraries"
+        layer = lambda_.LayerVersion.from_layer_version_arn(self, "LambdaLayer",
+            layer_version_arn = self.node.try_get_context("layer_version_arn")
         )
 
         # create Lambda function
@@ -62,6 +53,8 @@ class ReceiptParserStack(cdk.Stack):
         # provide lambda function with read access to s3 bucket
         s3.grant_read_write(function)
 
+        
+        
         # Outputs
 
         # Bucket Name
