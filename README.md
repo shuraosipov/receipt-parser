@@ -6,20 +6,20 @@ This solution extracts text from the scanned groceries receipts, parses the text
 1. Upload an original image to the S3 landing bucket to the `landing` folder and trigger a lambda function.
 2. A lambda function extracts the text from the image and saves results back to the S3 to the `staging` folder as a CSV file.
 
-# Configure credentials
+# Setup
+
+## Configure credentials
 Setup aws credentials via `aws configure` or define it via environment variables.
 You can generate aws credentials in AWS Console.
 
-# Configure virtual environment and install cdk modules
-
+## Configure virtual environment and install cdk modules
 ```
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-# Create new Lambda Layer
-
+## Create new Lambda Layer
 From the app root folder:
 ```
 $ cd build_scripts/
@@ -44,10 +44,10 @@ Enjoy your newly created layer - arn:aws:lambda:us-east-1:419091122511:layer:pan
 
 Find more details for configuring layer prerequisites [here](build_scripts/README.md)
 
-# Configure your CDK app parameters
+## Configure your CDK app parameters
 Copy lambda layer arn and update `layer_version_arn' parameter in `cdk.json` file.
 
-# Deploy function and necessary resources
+# Deploy
 From the `receipt-parser` root directory:
 ```
 cdk synth
@@ -82,46 +82,20 @@ Uploading file to S3...
 upload: static_assets/1.jpg to s3://receiptparserstack-s3bucketfbfa637e-1j835dh2u9yc1/landing/1.jpg
 Checking results...
 download: s3://receiptparserstack-s3bucketfbfa637e-1j835dh2u9yc1/staging/1.jpg-analyzeexpenseresponse.txt to ./response.txt
-Key,Value
-(VENDOR_NAME),MART
-Resp Time:(OTHER),130733
-RespDate:(OTHER),03012021
-RESPONSE CODE:(OTHER),AFPROVED
-MerchantID:0(OTHER),
-APPROVAL CODE:(OTHER),06775S
-MasterCard(OTHER),47.37
-BALANCE(OTHER),47.37
-ARC:00(OTHER),
-TOTAL NUMBER OF ITEMS SC.D =(OTHER),13
-CHANGE(OTHER),0.00
-Your Cashier was(OTHER),FERNANDA
-TC:(OTHER),CA9179BE1C9360.11
-ACCOUNT NUMBER :(OTHER),***********1032
-TSI(OTHER),6800
-01:07pm 311(OTHER),of
-APPLICATION LABEL(OTHER),Master Card
-TVR:(OTHER),8020008000
-01:07pm 52 4(OTHER),5 311
-TEL(OTHER),(857) 209-2747
-MasterCard Credi I -(OTHER),C
-Amount USD(OTHER),$47.37
-TOTAL AMOUNT:(TOTAL),"$47.3"""
-SEQUENCE NUMBER:(INVOICE_RECEIPT_ID),3094
-TAX(TAX),0.00
-
-MaesriTor Kha Scup(ITEM),2.49(PRICE)
-MAESRI GFEEN CURRY(ITEM),2.49(PRICE)
-TK Org Lite Coconu(ITEM),4.49(PRICE)
-MaesriTor Kha Scup(ITEM),2.49(PRICE)
-MaesriTor Kha Scup(ITEM),2.49(PRICE)
-MaesriTor Kha Scup(ITEM),2.49(PRICE)
-MaesriTor Kha Scup(ITEM),2.49(PRICE)
-MAESRI GFEEN CURRY(ITEM),2.49(PRICE)
-MASERI MESAMAN CJR(ITEM),2.49(PRICE)
-TK Org Coconat Mil(ITEM),4.49(PRICE)
-TK Org Coconut Mil(ITEM),4.49(PRICE)
-MEIJI CHOCOLATE(ITEM),4.99(PRICE)
-BBG SEAWEED SOUF(ITEM),8.99(PRICE)
+"TITLE","PRICE","VENDOR","DATE"
+"MaesriTor Kha Scup(ITEM)","2.49(PRICE)","MART","03012021"
+"MAESRI GFEEN CURRY(ITEM)","2.49(PRICE)","MART","03012021"
+"TK Org Lite Coconu(ITEM)","4.49(PRICE)","MART","03012021"
+"MaesriTor Kha Scup(ITEM)","2.49(PRICE)","MART","03012021"
+"MaesriTor Kha Scup(ITEM)","2.49(PRICE)","MART","03012021"
+"MaesriTor Kha Scup(ITEM)","2.49(PRICE)","MART","03012021"
+"MaesriTor Kha Scup(ITEM)","2.49(PRICE)","MART","03012021"
+"MAESRI GFEEN CURRY(ITEM)","2.49(PRICE)","MART","03012021"
+"MASERI MESAMAN CJR(ITEM)","2.49(PRICE)","MART","03012021"
+"TK Org Coconat Mil(ITEM)","4.49(PRICE)","MART","03012021"
+"TK Org Coconut Mil(ITEM)","4.49(PRICE)","MART","03012021"
+"MEIJI CHOCOLATE(ITEM)","4.99(PRICE)","MART","03012021"
+"BBG SEAWEED SOUF(ITEM)","8.99(PRICE)","MART","03012021"
 ```
 
 
@@ -141,17 +115,9 @@ Generating SAM template...
 Running a test...
 Reading invoke payload from stdin (you can also pass it from file with --event)
 Invoking lambda_function.lambda_handler (python3.9)
-TextractParserLayer6F210A7B is a local Layer in the template
-Building image........................
-Skip pulling image and use local one: samcli/lambda:python3.9-x86_64-8b3498bf2cafb5d4d6e9f50e0.
-
-Mounting /mnt/c/Users/shuraosipov/git/cost-explorer/receipt-parser/lambda as /var/task:ro,delegated inside runtime container
-START RequestId: bdc0fd9b-da17-4c3f-b913-09af7cea91a0 Version: $LATEST
-receiptparserstack-s3bucketfbfa637e-1j835dh2u9yc1
-landing/1.jpg
-1.jpg
-END RequestId: bdc0fd9b-da17-4c3f-b913-09af7cea91a0
-REPORT RequestId: bdc0fd9b-da17-4c3f-b913-09af7cea91a0  Init Duration: 0.19 ms  Duration: 3488.91 ms    Billed Duration: 3489 ms        Memory Size: 128 MB     Max Memory Used: 128 MB
+START RequestId: e7d99e53-3fbe-4efd-bd26-fb0b646edc2c Version: $LATEST
+END RequestId: e7d99e53-3fbe-4efd-bd26-fb0b646edc2c
+REPORT RequestId: e7d99e53-3fbe-4efd-bd26-fb0b646edc2c  Init Duration: 0.18 ms  Duration: 5111.17 ms    Billed Duration: 5112 ms     Memory Size: 128 MB     Max Memory Used: 128 MB
 {"statusCode": 200, "body": "\"Processing completed successfully!\""}
 ```
 Check this link to see how to install SAM ClI - https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install-linux.html
