@@ -70,9 +70,13 @@ def prerry_print_response_to_csv(prerry_print_response) -> str:
 
         if "RespDate" in row:
             meta['DATE'] = row.split(",")[1]
+        else:
+            meta['DATE'] = "N/A"
                     
         if "VENDOR_NAME" in row:
             meta['VENDOR'] = row.split(",")[1]
+        else:
+            meta['VENDOR'] = "N/A"
         
         if "TOTAL AMOUNT" in row:
             meta['TOTAL'] = row.split(",")[1]
@@ -85,8 +89,9 @@ def prerry_print_response_to_csv(prerry_print_response) -> str:
             products['PRICE'].append(row.split(",")[1])
     
     df = pd.DataFrame(products)
-    df['VENDOR']=meta['VENDOR']
-    df['DATE']=meta['DATE']        
+    
+    df['VENDOR'] = meta['VENDOR']
+    df['DATE'] = meta['DATE']        
 
     return df.to_csv(index=False)
 
