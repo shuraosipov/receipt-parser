@@ -41,7 +41,10 @@ class ReceiptParserStack(cdk.Stack):
             runtime=lambda_.Runtime.PYTHON_3_9,
             layers=[layer],
             role=lambda_role,
-            timeout=cdk.Duration.seconds(15)
+            timeout=cdk.Duration.seconds(15),
+            environment = {
+                "LOG_LEVEL":"INFO"
+            }
         )
 
         # create s3 notification for lambda function

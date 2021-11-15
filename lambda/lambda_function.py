@@ -8,6 +8,7 @@ from textractprettyprinter.t_pretty_print_expense import Textract_Expense_Pretty
 import pandas as pd
 import csv
 
+LOG_LEVEL = os.environ.get('LOG_LEVEL')
 
 textract = boto3.client(service_name='textract')
 s3 = boto3.client('s3')
@@ -113,10 +114,13 @@ def lambda_handler(event, context):
     print(bucket)
     print(key)
     print(file_name)
-
+    
     prerry_print_response = analyze_expences(bucket, key)
     table = prerry_print_response_to_csv(prerry_print_response)
-    
+
+    if LOG_LEVEL == 'DEBUG':
+        print(table)
+      
     S3Helper.writeToS3(table, bucket, f"staging/{file_name}-analyzeexpenseresponse.txt")
     
     return {

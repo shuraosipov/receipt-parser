@@ -3,6 +3,7 @@
 echo "Getting bucket name and function name from a cloudformation stack definition..."
 
 KEY="landing/1.jpg"
+
 BUCKET_NAME=$(aws cloudformation describe-stacks \
     --stack-name ReceiptParserStack  \
     --query "Stacks[0].Outputs" \
@@ -22,4 +23,4 @@ echo "Generating SAM template..."
 cdk synth --no-staging > template.yaml
 
 echo "Running a test..."
-sam local generate-event s3 put --bucket ${BUCKET_NAME} --key "$KEY"  | sam local invoke -e - "$FUNCTION_NAME"
+sam local generate-event s3 put --bucket ${BUCKET_NAME} --key "$KEY"  | sam local invoke --env-vars tests/env.json -e  - "$FUNCTION_NAME"
