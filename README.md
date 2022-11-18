@@ -1,5 +1,6 @@
-# Receipt parser (Work in Progress)
+# Receipt parser
 This solution extracts text from the scanned groceries receipts, parses the text, and saves the results in tabular form to the S3 for further processing and analysis.
+<img src="images/receipt_parser.png" width="640">
 
 # General flow for data ingestion
 
